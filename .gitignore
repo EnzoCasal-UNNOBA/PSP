@@ -6,8 +6,8 @@ __pycache__/
 *.pyc
 
 # SQLite
-*.db
-*.sqlite3
+data/*.db
+data/*.sqlite3
 
 # VSCode
 .vscode/
