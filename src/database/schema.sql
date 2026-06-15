@@ -44,6 +44,8 @@ CREATE TABLE IF NOT EXISTS actividades (
 
     job_id INTEGER NOT NULL,
 
+    activo INTEGER NOT NULL DEFAULT 1,
+
     FOREIGN KEY (job_id)
         REFERENCES jobs(id)
 );
