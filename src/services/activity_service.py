@@ -236,3 +236,79 @@ def update_activity(
 
     return filas_afectadas > 0
 
+def delete_activity(activity_id):
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE actividades
+        SET activo = 0
+        WHERE id = ?
+        """,
+        (activity_id,)
+    )
+
+    conn.commit()
+
+    filas_afectadas = cursor.rowcount
+
+    conn.close()
+
+    return filas_afectadas > 0
+
+def restore_activity(activity_id):
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE actividades
+        SET activo = 1
+        WHERE id = ?
+        """,
+        (activity_id,)
+    )
+
+    conn.commit()
+
+    filas_afectadas = cursor.rowcount
+
+    conn.close()
+
+    return filas_afectadas > 0
+
+def get_all_activities_admin():
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+            a.id,
+            a.fecha,
+            a.hora_inicio,
+            a.hora_fin,
+            a.interrupciones,
+            a.descripcion,
+            a.activo,
+            j.nombre
+        FROM actividades a
+        JOIN jobs j
+            ON a.job_id = j.id
+        ORDER BY a.fecha DESC
+        """
+    )
+
+    activities = cursor.fetchall()
+
+    conn.close()
+
+    return activities
+
