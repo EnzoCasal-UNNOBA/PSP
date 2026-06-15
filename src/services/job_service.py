@@ -141,3 +141,119 @@ def get_task_type_by_name(nombre):
     conn.close()
 
     return tipo
+
+def get_job_by_id(job_id):
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+            j.id,
+            j.nombre,
+            j.tipo_tarea_id,
+            t.nombre,
+            j.estimado_tiempo,
+            j.estimado_unidades,
+            j.activo
+        FROM jobs j
+        JOIN tipos_tarea t
+            ON j.tipo_tarea_id = t.id
+        WHERE j.id = ?
+        """,
+        (job_id,)
+    )
+
+    job = cursor.fetchone()
+
+    conn.close()
+
+    return job
+
+def update_job(
+        job_id,
+        nombre,
+        tipo_tarea_id,
+        estimado_tiempo,
+        estimado_unidades):
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE jobs
+        SET
+            nombre = ?,
+            tipo_tarea_id = ?,
+            estimado_tiempo = ?,
+            estimado_unidades = ?
+        WHERE id = ?
+        AND activo = 1
+        """,
+        (
+            nombre,
+            tipo_tarea_id,
+            estimado_tiempo,
+            estimado_unidades,
+            job_id
+        )
+    )
+
+    conn.commit()
+
+    filas_afectadas = cursor.rowcount
+
+    conn.close()
+
+    return filas_afectadas > 0
+
+def delete_job(job_id):
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE jobs
+        SET activo = 0
+        WHERE id = ?
+        """,
+        (job_id,)
+    )
+
+    conn.commit()
+
+    filas_afectadas = cursor.rowcount
+
+    conn.close()
+
+    return filas_afectadas > 0
+
+def restore_job(job_id):
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE jobs
+        SET activo = 1
+        WHERE id = ?
+        """,
+        (job_id,)
+    )
+
+    conn.commit()
+
+    filas_afectadas = cursor.rowcount
+
+    conn.close()
+
+    return filas_afectadas > 0
+
