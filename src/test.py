@@ -1,11 +1,22 @@
 from src.services.activity_service import (
-    calculate_duration
+    create_activity,
+    get_all_activities,
+    get_activity_by_id,
+    update_activity
 )
 
-print(
-    calculate_duration(
-        "09:00",
-        "11:00",
-        15
-    )
+resultado = update_activity(
+    activity_id=1,
+    fecha="2026-09-16",
+    hora_inicio="10:00",
+    hora_fin="12:30",
+    interrupciones=10,
+    descripcion="Actividad modificada",
+    job_id=1
 )
+
+print()
+print("Actualización:", resultado)
+
+print()
+print(get_activity_by_id(1))

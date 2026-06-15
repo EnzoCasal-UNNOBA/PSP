@@ -8,13 +8,31 @@ def create_activity(
         interrupciones,
         descripcion,
         job_id):
-    
+
     if not validate_time_range(
-        hora_inicio,
-        hora_fin):
+            hora_inicio,
+            hora_fin):
 
         raise ValueError(
             "La hora de fin debe ser posterior a la hora de inicio."
+        )
+
+    if interrupciones < 0:
+
+        raise ValueError(
+            "Las interrupciones no pueden ser negativas."
+        )
+
+    duracion = calculate_duration(
+        hora_inicio,
+        hora_fin,
+        interrupciones
+    )
+
+    if duracion <= 0:
+
+        raise ValueError(
+            "La duración resultante debe ser mayor a cero."
         )
 
     conn = get_connection()
@@ -146,3 +164,75 @@ def calculate_duration(
     return int(
         minutos - interrupciones
     )
+
+def update_activity(
+        activity_id,
+        fecha,
+        hora_inicio,
+        hora_fin,
+        interrupciones,
+        descripcion,
+        job_id):
+
+    if not validate_time_range(
+            hora_inicio,
+            hora_fin):
+
+        raise ValueError(
+            "La hora de fin debe ser posterior a la hora de inicio."
+        )
+
+    if interrupciones < 0:
+
+        raise ValueError(
+            "Las interrupciones no pueden ser negativas."
+        )
+
+    duracion = calculate_duration(
+        hora_inicio,
+        hora_fin,
+        interrupciones
+    )
+
+    if duracion <= 0:
+
+        raise ValueError(
+            "La duración resultante debe ser mayor a cero."
+        )
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE actividades
+        SET
+            fecha = ?,
+            hora_inicio = ?,
+            hora_fin = ?,
+            interrupciones = ?,
+            descripcion = ?,
+            job_id = ?
+        WHERE id = ?
+        AND activo = 1
+        """,
+        (
+            fecha,
+            hora_inicio,
+            hora_fin,
+            interrupciones,
+            descripcion,
+            job_id,
+            activity_id
+        )
+    )
+
+    conn.commit()
+
+    filas_afectadas = cursor.rowcount
+
+    conn.close()
+
+    return filas_afectadas > 0
+
