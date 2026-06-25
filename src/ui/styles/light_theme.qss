@@ -1,0 +1,143 @@
+/* =====================================
+   GENERAL
+===================================== */
+
+QMainWindow,
+QWidget {
+    background-color: #F9F9F9;
+    color: #333333;
+    font-size: 13px;
+}
+
+
+/* =====================================
+   SIDEBAR
+===================================== */
+
+QPushButton {
+    background-color: white;
+    border: 1px solid #DDDDDD;
+    border-radius: 6px;
+    padding: 8px;
+    min-height: 30px;
+}
+
+QPushButton:hover {
+    background-color: #E0F0FF;
+}
+
+QPushButton:pressed {
+    background-color: #CCE4FF;
+}
+
+
+/* =====================================
+   INPUTS
+===================================== */
+
+QLineEdit,
+QTextEdit,
+QComboBox,
+QDateEdit,
+QTimeEdit,
+QSpinBox {
+    background-color: white;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+
+/* =====================================
+   TABLAS
+===================================== */
+
+QTableWidget {
+    background-color: white;
+    border: 1px solid #DDDDDD;
+    gridline-color: #EEEEEE;
+    alternate-background-color: #F4F4F4;
+}
+
+QHeaderView::section {
+    background-color: #ECECEC;
+    border: none;
+    padding: 6px;
+    font-weight: bold;
+}
+
+
+/* =====================================
+   GROUP BOX
+===================================== */
+
+QGroupBox {
+    border: 1px solid #DDDDDD;
+    border-radius: 6px;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: white;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 5px;
+}
+
+
+/* =====================================
+   LABELS
+===================================== */
+
+QLabel {
+    color: #333333;
+}
+
+/* =====================================
+   TITULOS DE PAGINA
+===================================== */
+
+QLabel#pageTitle {
+    font-size: 22px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+
+/* =====================================
+   TABLA SELECCIONADA
+===================================== */
+
+QTableWidget::item:selected {
+    background-color: #CCE4FF;
+    color: #000000;
+}
+
+
+/* =====================================
+   COMBOBOX
+===================================== */
+
+QComboBox {
+    min-height: 24px;
+}
+
+
+/* =====================================
+   SPINBOX
+===================================== */
+
+QSpinBox {
+    min-height: 24px;
+}
+
+
+/* =====================================
+   DATE / TIME
+===================================== */
+
+QDateEdit,
+QTimeEdit {
+    min-height: 24px;
+}

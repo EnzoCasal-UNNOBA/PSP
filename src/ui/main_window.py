@@ -11,7 +11,8 @@ from ui.pages.dashboard_page import DashboardPage
 from ui.pages.activities_page import ActivitiesPage
 from ui.pages.jobs_page import JobsPage
 from ui.pages.categories_page import CategoriesPage
-from ui.pages.reports_page import ReportsPage
+from ui.pages.weekly_activity_page import WeeklyActivityPage
+from ui.pages.job_number_log_page import JobNumberLogPage
 
 
 class MainWindow(QMainWindow):
@@ -20,115 +21,70 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("PSP Manager")
-
         self.resize(1200, 700)
 
         central_widget = QWidget()
-
-        self.setCentralWidget(
-            central_widget
-        )
+        self.setCentralWidget(central_widget)
 
         main_layout = QHBoxLayout()
+        central_widget.setLayout(main_layout)
 
-        central_widget.setLayout(
-            main_layout
-        )
-
-        # Menú lateral
+        # ---------------------------
+        # Sidebar
+        # ---------------------------
 
         sidebar = QVBoxLayout()
 
-        self.btn_dashboard = QPushButton(
-            "Dashboard"
-        )
+        self.btn_activities = QPushButton("Daily Log")
+        self.btn_jobs = QPushButton("Jobs")
+        self.btn_categories = QPushButton("Categorías")
+        self.btn_weekly = QPushButton("Weekly Activity")
+        self.btn_joblog = QPushButton("Job Number Log")
+        self.btn_dashboard = QPushButton("Dashboard")
 
-        self.btn_activities = QPushButton(
-            "Daily Log"
-        )
-
-        self.btn_jobs = QPushButton(
-            "Jobs"
-        )
-
-        self.btn_categories = QPushButton(
-            "Categorías"
-        )
-
-        self.btn_reports = QPushButton(
-            "Reportes"
-        )
-
-        sidebar.addWidget(
-            self.btn_dashboard
-        )
-
-        sidebar.addWidget(
-            self.btn_activities
-        )
-
-        sidebar.addWidget(
-            self.btn_jobs
-        )
-
-        sidebar.addWidget(
-            self.btn_categories
-        )
-
-        sidebar.addWidget(
-            self.btn_reports
-        )
+        sidebar.addWidget(self.btn_dashboard)
+        sidebar.addWidget(self.btn_activities)
+        sidebar.addWidget(self.btn_jobs)
+        sidebar.addWidget(self.btn_categories)
+        sidebar.addWidget(self.btn_weekly)
+        sidebar.addWidget(self.btn_joblog)
 
         sidebar.addStretch()
 
-        # Stack de páginas
+        sidebar_widget = QWidget()
+        sidebar_widget.setLayout(sidebar)
+        sidebar_widget.setMinimumWidth(220)
+        sidebar_widget.setMaximumWidth(220)
+
+        # ---------------------------
+        # Páginas
+        # ---------------------------
 
         self.stack = QStackedWidget()
 
         self.dashboard_page = DashboardPage()
-
         self.activities_page = ActivitiesPage()
-
         self.jobs_page = JobsPage()
-
         self.categories_page = CategoriesPage()
+        self.weekly_page = WeeklyActivityPage()
+        self.joblog_page = JobNumberLogPage()
 
-        self.reports_page = ReportsPage()
+        self.stack.addWidget(self.dashboard_page)      # 0
+        self.stack.addWidget(self.activities_page)     # 1
+        self.stack.addWidget(self.jobs_page)           # 2
+        self.stack.addWidget(self.categories_page)     # 3
+        self.stack.addWidget(self.weekly_page)         # 4
+        self.stack.addWidget(self.joblog_page)         # 5
 
-        self.stack.addWidget(
-            self.dashboard_page
-        )
-
-        self.stack.addWidget(
-            self.activities_page
-        )
-
-        self.stack.addWidget(
-            self.jobs_page
-        )
-
-        self.stack.addWidget(
-            self.categories_page
-        )
-
-        self.stack.addWidget(
-            self.reports_page
-        )
-
-        main_layout.addLayout(
-            sidebar,
-            1
-        )
-
-        main_layout.addWidget(
-            self.stack,
-            4
-        )
+        main_layout.addWidget(sidebar_widget)
+        main_layout.addWidget(self.stack)
 
         self.connect_signals()
-        
-    def connect_signals(self):
 
+        # Abrir directamente en Daily Log
+        self.stack.setCurrentIndex(1)
+
+    def connect_signals(self):
         self.btn_dashboard.clicked.connect(
             lambda: self.stack.setCurrentIndex(0)
         )
@@ -145,6 +101,10 @@ class MainWindow(QMainWindow):
             lambda: self.stack.setCurrentIndex(3)
         )
 
-        self.btn_reports.clicked.connect(
+        self.btn_weekly.clicked.connect(
             lambda: self.stack.setCurrentIndex(4)
+        )
+
+        self.btn_joblog.clicked.connect(
+            lambda: self.stack.setCurrentIndex(5)
         )
