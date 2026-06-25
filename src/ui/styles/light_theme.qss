@@ -106,13 +106,18 @@ QLabel#pageTitle {
 
 
 /* =====================================
-   TABLA SELECCIONADA
+   TABLAS - Hover y Selección
 ===================================== */
 
+QTableWidget::item:hover {
+    background-color: #E0F0FF;   /* color de hover */
+}
+
 QTableWidget::item:selected {
-    background-color: #CCE4FF;
+    background-color: #CCE4FF;   /* color de selección */
     color: #000000;
 }
+
 
 
 /* =====================================

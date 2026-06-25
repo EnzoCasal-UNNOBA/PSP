@@ -1,5 +1,4 @@
-from PySide6.QtCore import QDate
-
+from PySide6.QtCore import QDate, QTime
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -14,8 +13,10 @@ from PySide6.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QHeaderView,
+    QSizePolicy,
     QSpinBox,
-    QAbstractItemView
+    QAbstractItemView,
+    QGroupBox
 )
 
 
@@ -29,16 +30,14 @@ class ActivitiesPage(QWidget):
         # =====================================
         # Título
         # =====================================
-
         title = QLabel("Daily Log")
         title.setObjectName("pageTitle")
-
         main_layout.addWidget(title)
 
         # =====================================
-        # Formulario
+        # Formulario dentro de un GroupBox
         # =====================================
-
+        form_group = QGroupBox("Registrar actividad")
         form_layout = QFormLayout()
 
         self.date_field = QDateEdit()
@@ -48,123 +47,79 @@ class ActivitiesPage(QWidget):
 
         self.start_time_field = QTimeEdit()
         self.start_time_field.setDisplayFormat("HH:mm")
+        self.start_time_field.setTime(QTime.currentTime())
 
         self.end_time_field = QTimeEdit()
         self.end_time_field.setDisplayFormat("HH:mm")
-
-        self.interruptions_field = QSpinBox()
-        self.interruptions_field.setRange(0, 999)
+        self.end_time_field.setTime(QTime.currentTime().addSecs(3600))
 
         self.job_field = QComboBox()
         self.job_field.addItem("Seleccionar Job...")
         self.job_field.setCurrentIndex(0)
 
-        self.description_field = QTextEdit()
-        self.description_field.setFixedHeight(70)
-        self.description_field.setPlaceholderText(
-            "Descripción breve de la actividad..."
-        )
+        self.interruptions_field = QSpinBox()
+        self.interruptions_field.setRange(0, 999)
 
+        self.description_field = QTextEdit()
+        self.description_field.setPlaceholderText("Descripción breve de la actividad...")
+        self.description_field.setFixedHeight(50)
+        self.description_field.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed) 
+        
+        # Orden ajustado: Job antes de interrupciones
         form_layout.addRow("Fecha:", self.date_field)
         form_layout.addRow("Inicio:", self.start_time_field)
         form_layout.addRow("Fin:", self.end_time_field)
-        form_layout.addRow("Interrupciones:", self.interruptions_field)
         form_layout.addRow("Job:", self.job_field)
+        form_layout.addRow("Interrupciones:", self.interruptions_field)
         form_layout.addRow("Descripción:", self.description_field)
 
-        # =====================================
-        # Botones
-        # =====================================
-
-        self.save_button = QPushButton("Nueva actividad")
+        # Botón principal del formulario
+        self.save_button = QPushButton("Guardar actividad")
         self.save_button.setObjectName("primaryButton")
+        form_layout.addRow(self.save_button)
 
+        form_group.setLayout(form_layout)
+        main_layout.addWidget(form_group)
+
+        # =====================================
+        # Sección tabla dentro de un GroupBox
+        # =====================================
+        table_group = QGroupBox("Actividades registradas")
+        table_layout = QVBoxLayout()
+
+        # Botones CRUD arriba de la tabla
+        buttons_layout = QHBoxLayout()
         self.edit_button = QPushButton("Editar seleccionada")
         self.delete_button = QPushButton("Eliminar seleccionada")
-
-        buttons_layout = QHBoxLayout()
-        buttons_layout.addWidget(self.save_button)
         buttons_layout.addWidget(self.edit_button)
         buttons_layout.addWidget(self.delete_button)
+        buttons_layout.addStretch()
 
-        form_container = QVBoxLayout()
-        form_container.addLayout(form_layout)
-        form_container.addLayout(buttons_layout)
-
-        main_layout.addLayout(form_container)
-
-        # =====================================
-        # Sección tabla
-        # =====================================
-
-        activities_label = QLabel("Actividades registradas")
-        activities_label.setObjectName("sectionTitle")
-
-        main_layout.addWidget(activities_label)
+        table_layout.addLayout(buttons_layout)
 
         self.table = QTableWidget()
-
         self.table.setColumnCount(6)
-
         self.table.setHorizontalHeaderLabels([
-            "Fecha",
-            "Inicio",
-            "Fin",
-            "Interrupciones",
-            "Job",
-            "Descripción"
+            "Fecha", "Inicio", "Fin", "Interrupciones", "Job", "Descripción"
         ])
-
         self.table.setAlternatingRowColors(True)
-
-        self.table.setSelectionBehavior(
-            QAbstractItemView.SelectRows
-        )
-
-        self.table.setEditTriggers(
-            QAbstractItemView.NoEditTriggers
-        )
-
-        self.table.horizontalHeader().setSectionResizeMode(
-            QHeaderView.Stretch
-        )
-
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.setMinimumHeight(250)
 
-        # Placeholder temporal de desarrollo
-
+        # Placeholder temporal
         self.table.insertRow(0)
+        self.table.setItem(0, 0, QTableWidgetItem("15/06/2026"))
+        self.table.setItem(0, 1, QTableWidgetItem("08:00"))
+        self.table.setItem(0, 2, QTableWidgetItem("10:00"))
+        self.table.setItem(0, 3, QTableWidgetItem("0"))
+        self.table.setItem(0, 4, QTableWidgetItem("Login"))
+        self.table.setItem(0, 5, QTableWidgetItem("Implementación inicial"))
 
-        self.table.setItem(
-            0, 0,
-            QTableWidgetItem("15/06/2026")
-        )
+        table_layout.addWidget(self.table)
+        table_group.setLayout(table_layout)
 
-        self.table.setItem(
-            0, 1,
-            QTableWidgetItem("08:00")
-        )
-
-        self.table.setItem(
-            0, 2,
-            QTableWidgetItem("10:00")
-        )
-
-        self.table.setItem(
-            0, 3,
-            QTableWidgetItem("0")
-        )
-
-        self.table.setItem(
-            0, 4,
-            QTableWidgetItem("Login")
-        )
-
-        self.table.setItem(
-            0, 5,
-            QTableWidgetItem("Implementación inicial")
-        )
-
-        main_layout.addWidget(self.table)
+        main_layout.addWidget(table_group)
 
         self.setLayout(main_layout)
