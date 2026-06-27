@@ -1,11 +1,14 @@
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
+    QHBoxLayout,
     QLabel,
+    QPushButton,
     QTableWidget,
     QTableWidgetItem,
     QHeaderView,
-    QPushButton
+    QAbstractItemView,
+    QGroupBox
 )
 
 
@@ -15,33 +18,76 @@ class JobNumberLogPage(QWidget):
         super().__init__()
 
         main_layout = QVBoxLayout()
+        main_layout.setContentsMargins(20, 20, 20, 20)
+        main_layout.setSpacing(15)
 
-        # Encabezado
-        main_layout.addWidget(QLabel("Job Number Log"))
+        # ======================================================
+        # Título
+        # ======================================================
 
-        # Tabla de Jobs
+        title = QLabel("Job Number Log")
+        title.setObjectName("pageTitle")
+        main_layout.addWidget(title)
+
+        # ======================================================
+        # Tabla
+        # ======================================================
+
+        table_group = QGroupBox("Registro histórico")
+        table_layout = QVBoxLayout()
+
         self.table = QTableWidget()
-        self.table.setColumnCount(7)
+        self.table.setColumnCount(13)
         self.table.setHorizontalHeaderLabels([
-            "Job #", "Nombre", "Tipo", "Estimado", "Real", "Mínimo", "Máximo"
+            "# Job",
+            "Fecha",
+            "Proceso",
+            "Tiempo Est.",
+            "Unid. Est.",
+            "Tiempo Real",
+            "Unid. Reales",
+            "Velocidad",
+            "Tiempo Acum.",
+            "Unid. Acum.",
+            "Vel. Prom.",
+            "Máx.",
+            "Mín."
         ])
         self.table.setAlternatingRowColors(True)
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.table.verticalHeader().setVisible(False)
+        self.table.setMinimumHeight(280)
+        self.table.setSortingEnabled(True)
 
-        # Ejemplo de fila placeholder
-        self.table.insertRow(0)
-        self.table.setItem(0, 0, QTableWidgetItem("1"))
-        self.table.setItem(0, 1, QTableWidgetItem("Login"))
-        self.table.setItem(0, 2, QTableWidgetItem("Implementación"))
-        self.table.setItem(0, 3, QTableWidgetItem("4h"))
-        self.table.setItem(0, 4, QTableWidgetItem("5h"))
-        self.table.setItem(0, 5, QTableWidgetItem("3h"))
-        self.table.setItem(0, 6, QTableWidgetItem("6h"))
+        # Placeholder
+        datos = [
+            ["1","15/07","Comunicación","120","1","105","1","105","105","1","105","105","105"],
+            ["2","15/07","Esp. Req.","400","1","550","1","550","550","1","550","550","550"],
+            ["3","18/07","Seguimiento","300","1","175","1","175","175","1","175","175","175"],
+            ["4","19/07","Planificación","300","2","565","2","282.5","565","2","282.5","282.5","282.5"],
+            ["5","18/07","Comunicación","100","1","195","1","195","300","2","150","195","105"]
+        ]
 
-        main_layout.addWidget(self.table)
+        for fila, valores in enumerate(datos):
+            self.table.insertRow(fila)
+            for columna, valor in enumerate(valores):
+                self.table.setItem(fila, columna, QTableWidgetItem(valor))
 
-        # Botón exportar
+        table_layout.addWidget(self.table)
+
+        # Botón exportar al fondo
+        bottom_layout = QHBoxLayout()
+        bottom_layout.addStretch()
         self.export_button = QPushButton("Exportar CSV")
-        main_layout.addWidget(self.export_button)
+        self.export_button.setObjectName("primaryButton")
+        bottom_layout.addWidget(self.export_button)
+
+        table_layout.addLayout(bottom_layout)
+
+        table_group.setLayout(table_layout)
+        main_layout.addWidget(table_group)
 
         self.setLayout(main_layout)

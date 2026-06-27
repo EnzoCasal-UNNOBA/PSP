@@ -35,19 +35,20 @@ class MainWindow(QMainWindow):
 
         sidebar = QVBoxLayout()
 
+        self.btn_dashboard = QPushButton("Dashboard")
         self.btn_activities = QPushButton("Daily Log")
-        self.btn_jobs = QPushButton("Jobs")
-        self.btn_categories = QPushButton("Categorías")
         self.btn_weekly = QPushButton("Weekly Activity")
         self.btn_joblog = QPushButton("Job Number Log")
-        self.btn_dashboard = QPushButton("Dashboard")
+        self.btn_jobs = QPushButton("Jobs")
+        self.btn_categories = QPushButton("Categorías")
 
+        # Orden solicitado
         sidebar.addWidget(self.btn_dashboard)
         sidebar.addWidget(self.btn_activities)
-        sidebar.addWidget(self.btn_jobs)
-        sidebar.addWidget(self.btn_categories)
         sidebar.addWidget(self.btn_weekly)
         sidebar.addWidget(self.btn_joblog)
+        sidebar.addWidget(self.btn_jobs)
+        sidebar.addWidget(self.btn_categories)
 
         sidebar.addStretch()
 
@@ -64,17 +65,18 @@ class MainWindow(QMainWindow):
 
         self.dashboard_page = DashboardPage()
         self.activities_page = ActivitiesPage()
-        self.jobs_page = JobsPage()
-        self.categories_page = CategoriesPage()
         self.weekly_page = WeeklyActivityPage()
         self.joblog_page = JobNumberLogPage()
+        self.jobs_page = JobsPage()
+        self.categories_page = CategoriesPage()
 
+        # Índices en el mismo orden que los botones
         self.stack.addWidget(self.dashboard_page)      # 0
         self.stack.addWidget(self.activities_page)     # 1
-        self.stack.addWidget(self.jobs_page)           # 2
-        self.stack.addWidget(self.categories_page)     # 3
-        self.stack.addWidget(self.weekly_page)         # 4
-        self.stack.addWidget(self.joblog_page)         # 5
+        self.stack.addWidget(self.weekly_page)         # 2
+        self.stack.addWidget(self.joblog_page)         # 3
+        self.stack.addWidget(self.jobs_page)           # 4
+        self.stack.addWidget(self.categories_page)     # 5
 
         main_layout.addWidget(sidebar_widget)
         main_layout.addWidget(self.stack)
@@ -88,23 +90,18 @@ class MainWindow(QMainWindow):
         self.btn_dashboard.clicked.connect(
             lambda: self.stack.setCurrentIndex(0)
         )
-
         self.btn_activities.clicked.connect(
             lambda: self.stack.setCurrentIndex(1)
         )
-
-        self.btn_jobs.clicked.connect(
+        self.btn_weekly.clicked.connect(
             lambda: self.stack.setCurrentIndex(2)
         )
-
-        self.btn_categories.clicked.connect(
+        self.btn_joblog.clicked.connect(
             lambda: self.stack.setCurrentIndex(3)
         )
-
-        self.btn_weekly.clicked.connect(
+        self.btn_jobs.clicked.connect(
             lambda: self.stack.setCurrentIndex(4)
         )
-
-        self.btn_joblog.clicked.connect(
+        self.btn_categories.clicked.connect(
             lambda: self.stack.setCurrentIndex(5)
         )

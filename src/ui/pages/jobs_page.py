@@ -23,77 +23,104 @@ class JobsPage(QWidget):
 
         main_layout = QVBoxLayout()
 
+        # =====================================================
         # Título
+        # =====================================================
+
         title = QLabel("Jobs")
         title.setObjectName("pageTitle")
         main_layout.addWidget(title)
 
+        description = QLabel(
+            "Administración de Jobs PSP y sus estimaciones."
+        )
+        description.setWordWrap(True)
+        main_layout.addWidget(description)
+
+        # =====================================================
         # Formulario
+        # =====================================================
+
         form_group = QGroupBox("Registrar Job")
+
         form_layout = QFormLayout()
 
         self.name_field = QLineEdit()
         self.name_field.setPlaceholderText("Nombre del Job...")
 
         self.category_field = QComboBox()
-        self.category_field.addItem("Seleccionar categoría...")
+        self.category_field.addItem("Seleccionar tipo de tarea...")
 
         self.estimated_time_field = QSpinBox()
-        self.estimated_time_field.setRange(1, 1000)
+        self.estimated_time_field.setRange(1, 100000)
+        self.estimated_time_field.setSuffix(" min")
 
         self.units_field = QSpinBox()
-        self.units_field.setRange(1, 1000)
+        self.units_field.setRange(1, 999)
 
         form_layout.addRow("Nombre:", self.name_field)
-        form_layout.addRow("Categoría:", self.category_field)
+        form_layout.addRow("Tipo de tarea:", self.category_field)
         form_layout.addRow("Tiempo estimado:", self.estimated_time_field)
         form_layout.addRow("Unidades estimadas:", self.units_field)
 
-        # Botón principal
-        button_layout = QHBoxLayout()
-        button_layout.addStretch()
-        self.new_button = QPushButton("Nuevo Job")
+        self.new_button = QPushButton("Guardar Job")
         self.new_button.setObjectName("primaryButton")
-        button_layout.addWidget(self.new_button)
 
-        form_container = QVBoxLayout()
-        form_container.addLayout(form_layout)
-        form_container.addLayout(button_layout)
-        form_group.setLayout(form_container)
+        form_layout.addRow(self.new_button)
+
+        form_group.setLayout(form_layout)
 
         main_layout.addWidget(form_group)
 
+        # =====================================================
         # Tabla
+        # =====================================================
+
         table_group = QGroupBox("Jobs registrados")
+
         table_layout = QVBoxLayout()
 
         crud_layout = QHBoxLayout()
-        self.edit_button = QPushButton("Editar seleccionado")
-        self.delete_button = QPushButton("Eliminar seleccionado")
+
+        self.edit_button = QPushButton("Editar")
+        self.delete_button = QPushButton("Eliminar")
+
         crud_layout.addWidget(self.edit_button)
         crud_layout.addWidget(self.delete_button)
         crud_layout.addStretch()
+
         table_layout.addLayout(crud_layout)
 
         self.table = QTableWidget()
+
         self.table.setColumnCount(5)
+
         self.table.setHorizontalHeaderLabels([
-            "ID", "Nombre", "Categoría", "Tiempo Est.", "Unidades"
+            "ID",
+            "Nombre",
+            "Tipo",
+            "Tiempo Est.",
+            "Unidades"
         ])
+
         self.table.setAlternatingRowColors(True)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.table.setMinimumHeight(280)
 
         # Placeholder
+
         self.table.insertRow(0)
-        self.table.setItem(0, 0, QTableWidgetItem("1"))
-        self.table.setItem(0, 1, QTableWidgetItem("Login sistema óptica"))
-        self.table.setItem(0, 2, QTableWidgetItem("Programación"))
-        self.table.setItem(0, 3, QTableWidgetItem("10"))
-        self.table.setItem(0, 4, QTableWidgetItem("5"))
+
+        self.table.setItem(0,0,QTableWidgetItem("1"))
+        self.table.setItem(0,1,QTableWidgetItem("Login Sistema"))
+        self.table.setItem(0,2,QTableWidgetItem("Diseño"))
+        self.table.setItem(0,3,QTableWidgetItem("120"))
+        self.table.setItem(0,4,QTableWidgetItem("1"))
 
         table_layout.addWidget(self.table)
+
         table_group.setLayout(table_layout)
 
         main_layout.addWidget(table_group)

@@ -1,12 +1,15 @@
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
+    QHBoxLayout,
     QLabel,
     QComboBox,
+    QPushButton,
     QTableWidget,
     QTableWidgetItem,
     QHeaderView,
-    QPushButton
+    QAbstractItemView,
+    QGroupBox
 )
 
 
@@ -17,38 +20,97 @@ class WeeklyActivityPage(QWidget):
 
         main_layout = QVBoxLayout()
 
-        # Encabezado
-        main_layout.addWidget(QLabel("Weekly Activity"))
+        # ======================================================
+        # Título
+        # ======================================================
 
-        # Selector de semana
+        title = QLabel("Weekly Activity")
+        title.setObjectName("pageTitle")
+        main_layout.addWidget(title)
+
+        # ======================================================
+        # Filtros
+        # ======================================================
+
+        filter_group = QGroupBox("Reporte semanal")
+
+        filter_layout = QHBoxLayout()
+
+        filter_layout.addWidget(QLabel("Semana"))
+
         self.week_selector = QComboBox()
-        self.week_selector.addItem("Semana 1")  # placeholder
+        self.week_selector.addItem("Semana 1")
         self.week_selector.addItem("Semana 2")
-        main_layout.addWidget(self.week_selector)
+        self.week_selector.addItem("Semana 3")
 
-        # Tabla de actividades
+        filter_layout.addWidget(self.week_selector)
+
+        filter_layout.addStretch()
+
+        self.export_button = QPushButton("Exportar CSV")
+        self.export_button.setObjectName("primaryButton")
+
+        filter_layout.addWidget(self.export_button)
+
+        filter_group.setLayout(filter_layout)
+
+        main_layout.addWidget(filter_group)
+
+        # ======================================================
+        # Tabla
+        # ======================================================
+
+        table_group = QGroupBox("Resumen semanal")
+
+        table_layout = QVBoxLayout()
+
         self.table = QTableWidget()
-        self.table.setColumnCount(5)
+
+        self.table.setColumnCount(8)
+
         self.table.setHorizontalHeaderLabels([
-            "Fecha", "Tipo", "Tiempo", "Interrupciones", "Descripción"
+            "Fecha",
+            "Comunicación",
+            "Esp. Requisitos",
+            "Seguimiento",
+            "Planificación",
+            "Diseño",
+            "Totales",
+            "Semana"
         ])
+
         self.table.setAlternatingRowColors(True)
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-        # Ejemplo de fila placeholder
-        self.table.insertRow(0)
-        self.table.setItem(0, 0, QTableWidgetItem("15/06/2026"))
-        self.table.setItem(0, 1, QTableWidgetItem("Implementación"))
-        self.table.setItem(0, 2, QTableWidgetItem("2h"))
-        self.table.setItem(0, 3, QTableWidgetItem("0"))
-        self.table.setItem(0, 4, QTableWidgetItem("Login inicial"))
+        # Placeholder
 
-        main_layout.addWidget(self.table)
+        datos = [
+            ["15/07","105","210","","","","315","1"],
+            ["16/07","","340","","","","340","1"],
+            ["17/07","45","320","","","","365","1"],
+            ["18/07","150","","55","","","205","1"],
+            ["19/07","","","","355","130","485","1"],
+            ["TOTAL","300","870","55","355","130","1710",""]
+        ]
 
-        # Botón exportar
-        self.export_button = QPushButton("Exportar CSV")
-        main_layout.addWidget(self.export_button)
+        for fila, valores in enumerate(datos):
+
+            self.table.insertRow(fila)
+
+            for columna, valor in enumerate(valores):
+
+                self.table.setItem(
+                    fila,
+                    columna,
+                    QTableWidgetItem(valor)
+                )
+
+        table_layout.addWidget(self.table)
+
+        table_group.setLayout(table_layout)
+
+        main_layout.addWidget(table_group)
 
         self.setLayout(main_layout)
-        
-        
