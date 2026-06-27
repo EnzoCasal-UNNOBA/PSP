@@ -30,9 +30,7 @@ class CategoriesPage(QWidget):
         title.setObjectName("pageTitle")
         main_layout.addWidget(title)
 
-        description = QLabel(
-            "Administración de los tipos de tarea utilizados por los Jobs."
-        )
+        description = QLabel("Administración de los tipos de tarea utilizados por los Jobs.")
         description.setWordWrap(True)
         main_layout.addWidget(description)
 
@@ -44,7 +42,6 @@ class CategoriesPage(QWidget):
 
         self.name_field = QLineEdit()
         self.name_field.setPlaceholderText("Ej.: Diseño, Codificación, Revisión...")
-
         form_layout.addRow("Nombre:", self.name_field)
 
         self.new_button = QPushButton("Guardar tipo")
@@ -74,7 +71,7 @@ class CategoriesPage(QWidget):
         self.table.setAlternatingRowColors(True)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.table.verticalHeader().setVisible(False)  # elimina los números fijos de fila
+        self.table.verticalHeader().setVisible(False)
         self.table.setMinimumHeight(280)
         self.table.setSortingEnabled(True)
 
@@ -84,19 +81,6 @@ class CategoriesPage(QWidget):
             1: 0.85   # Nombre → 85% del ancho
         }
         self.table.resizeEvent = self.resize_columns
-
-        # Placeholder con IDs autoincrementales reales
-        ejemplos = [
-            "Comunicación",
-            "Esp. Requisitos",
-            "Diseño",
-            "Seguimiento",
-            "Planificación"
-        ]
-        for fila, nombre in enumerate(ejemplos):
-            self.table.insertRow(fila)
-            self.table.setItem(fila, 0, QTableWidgetItem(str(fila + 1)))  # ID autoincremental
-            self.table.setItem(fila, 1, QTableWidgetItem(nombre))
 
         table_layout.addWidget(self.table)
         table_group.setLayout(table_layout)

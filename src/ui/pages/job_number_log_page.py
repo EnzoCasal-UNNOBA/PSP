@@ -5,7 +5,6 @@ from PySide6.QtWidgets import (
     QLabel,
     QPushButton,
     QTableWidget,
-    QTableWidgetItem,
     QHeaderView,
     QAbstractItemView,
     QGroupBox
@@ -60,8 +59,7 @@ class JobNumberLogPage(QWidget):
         self.table.setSortingEnabled(True)
 
         # Distribución porcentual de columnas
-        # Definimos porcentajes (suma aprox. 100)
-        porcentajes = {
+        self.porcentajes = {
             0: 0.05,   # # Job → 5%
             1: 0.08,   # Fecha → 8%
             2: 0.20,   # Proceso → 20%
@@ -94,22 +92,6 @@ class JobNumberLogPage(QWidget):
         main_layout.addWidget(table_group)
 
         self.setLayout(main_layout)
-
-        # Placeholder
-        datos = [
-            ["1","15/07","Comunicación","120","1","105","1","105","105","1","105","105","105"],
-            ["2","15/07","Esp. Req.","400","1","550","1","550","550","1","550","550","550"],
-            ["3","18/07","Seguimiento","300","1","175","1","175","175","1","175","175","175"],
-            ["4","19/07","Planificación","300","2","565","2","282.5","565","2","282.5","282.5","282.5"],
-            ["5","18/07","Comunicación","100","1","195","1","195","300","2","150","195","105"]
-        ]
-        for fila, valores in enumerate(datos):
-            self.table.insertRow(fila)
-            for columna, valor in enumerate(valores):
-                self.table.setItem(fila, columna, QTableWidgetItem(valor))
-
-        # Guardar porcentajes como atributo
-        self.porcentajes = porcentajes
 
     def resize_columns(self, event):
         ancho_total = self.table.viewport().width()

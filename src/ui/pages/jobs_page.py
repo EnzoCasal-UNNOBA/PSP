@@ -9,7 +9,6 @@ from PySide6.QtWidgets import (
     QSpinBox,
     QPushButton,
     QTableWidget,
-    QTableWidgetItem,
     QHeaderView,
     QAbstractItemView,
     QGroupBox
@@ -94,25 +93,16 @@ class JobsPage(QWidget):
         self.table.setSortingEnabled(True)
 
         # Distribución porcentual de columnas
-        # ID pequeña, Tiempo y Unidades más reducidas, Nombre y Categoría ocupan el resto
         self.porcentajes = {
             0: 0.08,   # ID → 8%
             1: 0.30,   # Nombre → 30%
             2: 0.25,   # Categoría → 25%
-            3: 0.22,   # Tiempo Est. → 22% (3/4 del tamaño original)
+            3: 0.22,   # Tiempo Est. → 22%
             4: 0.15    # Unidades → 15%
         }
 
         # Ajustar columnas dinámicamente al redimensionar
         self.table.resizeEvent = self.resize_columns
-
-        # Placeholder
-        self.table.insertRow(0)
-        self.table.setItem(0, 0, QTableWidgetItem("1"))
-        self.table.setItem(0, 1, QTableWidgetItem("Login Sistema"))
-        self.table.setItem(0, 2, QTableWidgetItem("Diseño"))
-        self.table.setItem(0, 3, QTableWidgetItem("120"))
-        self.table.setItem(0, 4, QTableWidgetItem("1"))
 
         table_layout.addWidget(self.table)
         table_group.setLayout(table_layout)

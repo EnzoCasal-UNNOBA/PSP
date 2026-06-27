@@ -30,7 +30,6 @@ class ActivitiesPage(QWidget):
         # ===================================================
         # TÍTULO
         # ===================================================
-
         title = QLabel("Daily Log")
         title.setObjectName("pageTitle")
         main_layout.addWidget(title)
@@ -38,9 +37,7 @@ class ActivitiesPage(QWidget):
         # ===================================================
         # FORMULARIO
         # ===================================================
-
         form_group = QGroupBox("Registrar actividad")
-
         form = QFormLayout()
 
         self.date_field = QDateEdit()
@@ -63,14 +60,9 @@ class ActivitiesPage(QWidget):
         self.interruptions.setRange(0, 999)
 
         self.description = QTextEdit()
-        self.description.setPlaceholderText(
-            "Descripción breve..."
-        )
+        self.description.setPlaceholderText("Descripción breve...")
         self.description.setFixedHeight(55)
-        self.description.setSizePolicy(
-            QSizePolicy.Expanding,
-            QSizePolicy.Fixed
-        )
+        self.description.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         form.addRow("Fecha", self.date_field)
         form.addRow("Hora inicio", self.start_time)
@@ -81,74 +73,38 @@ class ActivitiesPage(QWidget):
 
         self.save_button = QPushButton("Guardar actividad")
         self.save_button.setObjectName("primaryButton")
-
         form.addRow(self.save_button)
 
         form_group.setLayout(form)
-
         main_layout.addWidget(form_group)
 
         # ===================================================
         # TABLA
         # ===================================================
-
         table_group = QGroupBox("Actividades del día")
-
         table_layout = QVBoxLayout()
 
         crud = QHBoxLayout()
-
         self.edit_button = QPushButton("Editar")
         self.delete_button = QPushButton("Eliminar")
         self.refresh_button = QPushButton("Actualizar")
-
         crud.addWidget(self.edit_button)
         crud.addWidget(self.delete_button)
         crud.addWidget(self.refresh_button)
         crud.addStretch()
-
         table_layout.addLayout(crud)
 
         self.table = QTableWidget()
-
         self.table.setColumnCount(6)
-
         self.table.setHorizontalHeaderLabels([
-            "Fecha",
-            "Inicio",
-            "Fin",
-            "Int.",
-            "Job",
-            "Descripción"
+            "Fecha", "Inicio", "Fin", "Int.", "Job", "Descripción"
         ])
-
-        self.table.horizontalHeader().setSectionResizeMode(
-            QHeaderView.Stretch
-        )
-
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.setAlternatingRowColors(True)
-
-        self.table.setSelectionBehavior(
-            QAbstractItemView.SelectRows
-        )
-
-        self.table.setEditTriggers(
-            QAbstractItemView.NoEditTriggers
-        )
-
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.setMinimumHeight(280)
 
-        self.table.insertRow(0)
-
-        self.table.setItem(0,0,QTableWidgetItem("18/06/2026"))
-        self.table.setItem(0,1,QTableWidgetItem("08:00"))
-        self.table.setItem(0,2,QTableWidgetItem("09:20"))
-        self.table.setItem(0,3,QTableWidgetItem("2"))
-        self.table.setItem(0,4,QTableWidgetItem("Login"))
-        self.table.setItem(0,5,QTableWidgetItem("Implementación"))
-
         table_layout.addWidget(self.table)
-
         table_group.setLayout(table_layout)
-
         main_layout.addWidget(table_group)
