@@ -66,7 +66,8 @@ class WeeklyActivityPage(QWidget):
 
         self.table = QTableWidget()
 
-        self.table.setColumnCount(8)
+        self.table.setColumnCount(7)
+        self.table.setRowCount(8)
 
         self.table.setHorizontalHeaderLabels([
             "Fecha",
@@ -75,38 +76,43 @@ class WeeklyActivityPage(QWidget):
             "Seguimiento",
             "Planificación",
             "Diseño",
-            "Totales",
-            "Semana"
+            "Totales"
+        ])
+
+        self.table.setVerticalHeaderLabels([
+            "L",
+            "M",
+            "M",
+            "J",
+            "V",
+            "S",
+            "D",
+            "Totales"
         ])
 
         self.table.setAlternatingRowColors(True)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
         # Placeholder
-
         datos = [
-            ["15/07","105","210","","","","315","1"],
-            ["16/07","","340","","","","340","1"],
-            ["17/07","45","320","","","","365","1"],
-            ["18/07","150","","55","","","205","1"],
-            ["19/07","","","","355","130","485","1"],
-            ["TOTAL","300","870","55","355","130","1710",""]
+            ["15/07","105","210","","","","315"],
+            ["16/07","","340","","","","340"],
+            ["17/07","45","320","","","","365"],
+            ["18/07","150","","55","","","205"],
+            ["19/07","","","","355","130","485"],
+            ["20/07","","","","","","0"],
+            ["21/07","","","","","","0"],
+            ["TOTAL","300","870","55","355","130","1710"]
         ]
 
         for fila, valores in enumerate(datos):
-
-            self.table.insertRow(fila)
-
             for columna, valor in enumerate(valores):
-
                 self.table.setItem(
                     fila,
                     columna,
                     QTableWidgetItem(valor)
                 )
-
         table_layout.addWidget(self.table)
 
         table_group.setLayout(table_layout)

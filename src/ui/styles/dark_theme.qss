@@ -1,0 +1,156 @@
+/* =====================================
+   GENERAL
+===================================== */
+
+QMainWindow,
+QWidget {
+    background-color: #1E1E1E;   /* fondo oscuro */
+    color: #E0E0E0;              /* texto claro */
+    font-size: 13px;
+}
+
+
+/* =====================================
+   SIDEBAR
+===================================== */
+
+QPushButton {
+    background-color: #2A2A2A;
+    border: 1px solid #444444;
+    border-radius: 6px;
+    padding: 8px;
+    min-height: 30px;
+    color: #E0E0E0;
+}
+
+QPushButton:hover {
+    background-color: #3A3A3A;
+}
+
+QPushButton:pressed {
+    background-color: #505050;
+}
+
+
+/* =====================================
+   INPUTS
+===================================== */
+
+QLineEdit,
+QTextEdit,
+QComboBox,
+QDateEdit,
+QTimeEdit,
+QSpinBox {
+    background-color: #2A2A2A;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 4px;
+    color: #E0E0E0;
+}
+
+
+/* =====================================
+   TABLAS
+===================================== */
+
+QTableWidget {
+    background-color: #2A2A2A;
+    border: 1px solid #444444;
+    gridline-color: #555555;
+    alternate-background-color: #333333;
+    color: #E0E0E0;
+}
+
+QHeaderView::section {
+    background-color: #3A3A3A;
+    border: none;
+    padding: 6px;
+    font-weight: bold;
+    color: #E0E0E0;
+}
+
+
+/* =====================================
+   GROUP BOX
+===================================== */
+
+QGroupBox {
+    border: 1px solid #444444;
+    border-radius: 6px;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #2A2A2A;
+    color: #E0E0E0;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 5px;
+}
+
+
+/* =====================================
+   LABELS
+===================================== */
+
+QLabel {
+    color: #E0E0E0;
+}
+
+/* =====================================
+   TITULOS DE PAGINA
+===================================== */
+
+QLabel#pageTitle {
+    font-size: 22px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    color: #FFFFFF;
+}
+
+
+/* =====================================
+   TABLAS - Hover y Selección
+===================================== */
+
+QTableWidget::item:hover {
+    background-color: #3A3A3A;   /* hover */
+}
+
+QTableWidget::item:selected {
+    background-color: #505050;   /* selección */
+    color: #FFFFFF;
+}
+
+
+/* =====================================
+   COMBOBOX
+===================================== */
+
+QComboBox {
+    min-height: 24px;
+    color: #E0E0E0;
+}
+
+
+/* =====================================
+   SPINBOX
+===================================== */
+
+QSpinBox {
+    min-height: 24px;
+    color: #E0E0E0;
+}
+
+
+/* =====================================
+   DATE / TIME
+===================================== */
+
+QDateEdit,
+QTimeEdit {
+    min-height: 24px;
+    color: #E0E0E0;
+}
