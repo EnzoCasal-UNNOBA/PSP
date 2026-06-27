@@ -1,10 +1,22 @@
 from src.database.database import get_connection
+from src.services.validation_utils import (
+    validate_optional_integer,
+    validate_optional_number,
+    validate_required_text
+)
 
 def create_job(
         nombre,
         tipo_tarea_id,
         estimado_tiempo=None,
         estimado_unidades=None):
+
+    nombre = validate_job_data(
+        nombre,
+        tipo_tarea_id,
+        estimado_tiempo,
+        estimado_unidades
+    )
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -42,7 +54,7 @@ def create_job(
 
     return job_id
 
-def get_all_jobs():
+def get_all_active_jobs():
 
     conn = get_connection()
 
@@ -69,78 +81,6 @@ def get_all_jobs():
     conn.close()
 
     return jobs
-
-def create_task_type(nombre):
-
-    existente = get_task_type_by_name(nombre)
-
-    if existente:
-        return existente[0]
-
-    conn = get_connection()
-
-    cursor = conn.cursor()
-
-    cursor.execute(
-        """
-        INSERT INTO tipos_tarea(nombre)
-        VALUES(?)
-        """,
-        (nombre,)
-    )
-
-    conn.commit()
-
-    task_type_id = cursor.lastrowid
-
-    conn.close()
-
-    return task_type_id
-
-def get_all_task_types():
-
-    conn = get_connection()
-
-    cursor = conn.cursor()
-
-    cursor.execute(
-        """
-        SELECT
-            id,
-            nombre
-        FROM tipos_tarea
-        ORDER BY nombre
-        """
-    )
-
-    tipos = cursor.fetchall()
-
-    conn.close()
-
-    return tipos
-
-def get_task_type_by_name(nombre):
-
-    conn = get_connection()
-
-    cursor = conn.cursor()
-
-    cursor.execute(
-        """
-        SELECT
-            id,
-            nombre
-        FROM tipos_tarea
-        WHERE nombre = ?
-        """,
-        (nombre,)
-    )
-
-    tipo = cursor.fetchone()
-
-    conn.close()
-
-    return tipo
 
 def get_job_by_id(job_id):
 
@@ -178,6 +118,13 @@ def update_job(
         tipo_tarea_id,
         estimado_tiempo,
         estimado_unidades):
+
+    nombre = validate_job_data(
+        nombre,
+        tipo_tarea_id,
+        estimado_tiempo,
+        estimado_unidades
+    )
 
     conn = get_connection()
 
@@ -257,3 +204,45 @@ def restore_job(job_id):
 
     return filas_afectadas > 0
 
+#####################
+###### Helpers ######
+#####################
+
+def validate_job_data(
+        nombre,
+        tipo_tarea_id,
+        estimado_tiempo,
+        estimado_unidades):
+
+    nombre = validate_required_text(nombre, "El nombre del trabajo no puede estar vacio.")
+
+    if not active_task_type_exists(tipo_tarea_id):
+        raise ValueError("El tipo de tarea seleccionado no existe o esta inactivo.")
+
+    validate_optional_integer(estimado_tiempo, "El tiempo estimado debe ser un numero entero mayor o igual a cero.")
+
+    validate_optional_number(estimado_unidades, "Las unidades estimadas deben ser un numero mayor o igual a cero.")
+
+    return nombre
+
+def active_task_type_exists(tipo_tarea_id):
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT id
+        FROM tipos_tarea
+        WHERE id = ?
+        AND activo = 1
+        """,
+        (tipo_tarea_id,)
+    )
+
+    task_type = cursor.fetchone()
+
+    conn.close()
+
+    return task_type is not None

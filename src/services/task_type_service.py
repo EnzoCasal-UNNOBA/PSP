@@ -1,12 +1,19 @@
 from src.database.database import get_connection
-
+from src.services.validation_utils import (
+    normalize_text,
+    validate_required_text
+)
 
 def create_task_type(nombre):
+
+    nombre = validate_task_type_name(nombre)
 
     existente = get_task_type_by_name(nombre)
 
     if existente:
-        return existente[0]
+        if existente[2] == 1:
+            return existente[0]
+        raise ValueError("Ya existe un tipo de tarea inactivo con ese nombre. Debe restaurarlo antes de usarlo.")
 
     conn = get_connection()
 
@@ -28,7 +35,7 @@ def create_task_type(nombre):
 
     return task_type_id
 
-def get_all_task_types():
+def get_active_task_types():
 
     conn = get_connection()
 
@@ -51,7 +58,10 @@ def get_all_task_types():
 
     return tipos
 
+# Cambiado para validar tipos de tarea inactivas tambien.
 def get_task_type_by_name(nombre):
+
+    nombre = normalize_text(nombre)
 
     conn = get_connection()
 
@@ -61,10 +71,10 @@ def get_task_type_by_name(nombre):
         """
         SELECT
             id,
-            nombre
+            nombre,
+            activo
         FROM tipos_tarea
         WHERE nombre = ?
-        AND activo = 1
         """,
         (nombre,)
     )
@@ -77,6 +87,13 @@ def get_task_type_by_name(nombre):
 
 def update_task_type(task_type_id, nuevo_nombre):
 
+    nuevo_nombre = validate_task_type_name(nuevo_nombre)
+
+    existente = get_task_type_by_name(nuevo_nombre)
+
+    if existente and existente[0] != task_type_id:
+        raise ValueError("Ya existe un tipo de tarea con ese nombre.")
+
     conn = get_connection()
 
     cursor = conn.cursor()
@@ -86,6 +103,7 @@ def update_task_type(task_type_id, nuevo_nombre):
         UPDATE tipos_tarea
         SET nombre = ?
         WHERE id = ?
+        AND activo = 1
         """,
         (
             nuevo_nombre,
@@ -169,3 +187,14 @@ def restore_task_type(task_type_id):
     conn.close()
 
     return filas_afectadas > 0
+
+#####################
+###### Helpers ######
+#####################
+
+def validate_task_type_name(nombre):
+
+    return validate_required_text(
+        nombre,
+        "El nombre del tipo de tarea no puede estar vacio."
+    )
