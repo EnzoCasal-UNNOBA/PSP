@@ -184,16 +184,11 @@ class WeeklyActivityPage(QWidget):
 
         self.week_selector.clear()
 
-        conn = get_connection()
+        semanas = get_available_weeks()
 
-        weeks = get_available_weeks(conn)
-
-        conn.close()
-
-        for numero, fecha in enumerate(weeks, start=1):
+        for _, fecha in semanas:
 
             self.week_selector.addItem(
-                f"Semana {numero}",
                 fecha
             )
 

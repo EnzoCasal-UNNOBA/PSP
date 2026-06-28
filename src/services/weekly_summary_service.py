@@ -131,10 +131,14 @@ def get_week_entries(conn, fecha_inicio: str):
         (fecha_inicio, fecha_fin)
     ).fetchall()
 
-def get_available_weeks(conn):
+def get_available_weeks():
+
+    conn = get_connection()
+
     semana_inicial = get_psp_start_week(conn)
 
     if not semana_inicial:
+        conn.close()
         return []
 
     row = conn.execute(
@@ -146,21 +150,29 @@ def get_available_weeks(conn):
     ).fetchone()
 
     if not row or not row[0]:
+        conn.close()
         return []
 
     ultima_fecha = datetime.strptime(row[0], "%Y-%m-%d")
     semana_actual = datetime.strptime(semana_inicial, "%Y-%m-%d")
 
-    weeks = []
+    semanas = []
+
+    numero = 1
 
     while semana_actual <= ultima_fecha:
-        weeks.append(
-            semana_actual.strftime("%Y-%m-%d")
-        )
 
+        semanas.append((
+            numero,
+            semana_actual.strftime("%Y-%m-%d")
+        ))
+
+        numero += 1
         semana_actual += timedelta(days=7)
 
-    return weeks
+    conn.close()
+
+    return semanas
 
 def get_first_activity_date(conn):
     row = conn.execute(
