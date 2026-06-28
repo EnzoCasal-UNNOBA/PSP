@@ -1,4 +1,4 @@
-from src.database.database import get_connection
+from database.database import get_connection
 from datetime import datetime, timedelta
 
 def get_weekly_statistics(fecha_inicio: str):

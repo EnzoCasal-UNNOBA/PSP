@@ -1,5 +1,5 @@
-from src.database.database import get_connection
-from src.services.validation_utils import (
+from database.database import get_connection
+from services.validation_utils import (
     parse_time,
     validate_date,
     validate_time
@@ -12,13 +12,13 @@ def create_activity(
         interrupciones,
         descripcion,
         job_id):
-
     (
         fecha,
         hora_inicio,
-        hora_fin
-    ) = validate_activity_data
-    (
+        hora_fin,
+        interrupciones,
+        job_id
+    ) = validate_activity_data(
         fecha,
         hora_inicio,
         hora_fin,
@@ -78,6 +78,7 @@ def get_all_activities():
             a.hora_fin,
             a.interrupciones,
             a.descripcion,
+            j.id,
             j.nombre
         FROM actividades a
         JOIN jobs j
@@ -130,14 +131,19 @@ def update_activity(
         interrupciones,
         descripcion,
         job_id):
-
     (
         fecha,
         hora_inicio,
         hora_fin,
-        interrupciones
-    ) = validate_activity_data(fecha, hora_inicio, hora_fin, interrupciones, job_id)
-
+        interrupciones,
+        job_id
+    ) = validate_activity_data(
+        fecha,
+        hora_inicio,
+        hora_fin,
+        interrupciones,
+        job_id
+    )
     if activity_overlaps(fecha, hora_inicio, hora_fin, activity_id):
         raise ValueError("Ya existe una actividad registrada en ese rango horario.")
 
@@ -312,7 +318,9 @@ def validate_activity_data(
     return (
         fecha,
         hora_inicio,
-        hora_fin
+        hora_fin,
+        interrupciones,
+        job_id
     )
 
 def job_exists(job_id):

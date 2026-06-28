@@ -1,5 +1,5 @@
-from src.database.database import get_connection
-from src.services.validation_utils import (
+from database.database import get_connection
+from services.validation_utils import (
     validate_optional_integer,
     validate_optional_number,
     validate_required_text
@@ -10,8 +10,12 @@ def create_job(
         tipo_tarea_id,
         estimado_tiempo=None,
         estimado_unidades=None):
-
-    nombre = validate_job_data(
+    (
+        nombre,
+        tipo_tarea_id,
+        estimado_tiempo,
+        estimado_unidades
+    ) = validate_job_data(
         nombre,
         tipo_tarea_id,
         estimado_tiempo,
@@ -118,8 +122,12 @@ def update_job(
         tipo_tarea_id,
         estimado_tiempo,
         estimado_unidades):
-
-    nombre = validate_job_data(
+    (
+        nombre,
+        tipo_tarea_id,
+        estimado_tiempo,
+        estimado_unidades
+    ) = validate_job_data(
         nombre,
         tipo_tarea_id,
         estimado_tiempo,
@@ -223,7 +231,12 @@ def validate_job_data(
 
     validate_optional_number(estimado_unidades, "Las unidades estimadas deben ser un numero mayor o igual a cero.")
 
-    return nombre
+    return (
+        nombre,
+        tipo_tarea_id,
+        estimado_tiempo,
+        estimado_unidades
+    )
 
 def active_task_type_exists(tipo_tarea_id):
 

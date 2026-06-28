@@ -1,5 +1,5 @@
-from src.database.database import get_connection
-from src.services.validation_utils import (
+from database.database import get_connection
+from services.validation_utils import (
     normalize_text,
     validate_required_text
 )
